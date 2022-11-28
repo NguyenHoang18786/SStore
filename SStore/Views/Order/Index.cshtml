@@ -1,0 +1,67 @@
+﻿@model PagedList.IPagedList<SStore.Models.Order>
+@using PagedList.Mvc;
+@using PagedList;
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-2 mb-sm-4 mb-3">
+    @* Breadccrumb *@
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home", new {area = ""})" class="breadcrumb-client"><i class="bi bi-house-door"></i> Home</a></li>
+            <li class="breadcrumb-item breadcrumb-client-active">Orders</li>
+        </ol>
+    </nav>
+    @* Page Title *@
+    <h2 class="text-uppercase text-center page-title">Orders</h2>
+
+    <div class="mt-3 mt-sm-4 mb-5">
+        @foreach (var item in Model)
+        {
+            <a href="@Url.Action("Details", "Order", new {area = "", id = item.OrderId })" aria-current="true" class="text-decoration-none">
+                <div class="border rounded mb-2 order-list p-2 px-sm-3">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <h5 class="mb-1">Order ID: @item.OrderId</h5>
+                        <small class="fst-italic d-none d-sm-block">@item.OrderDate.ToString("F")</small>
+                        <small class="fst-italic d-block d-sm-none">@item.OrderDate.ToString("g")</small>
+                    </div>
+                    <div class="mb-1">
+                        @if (item.Status.ToString().Equals("Processing"))
+                        {
+                            <div class="d-flex align-items-center">
+                                <span class="fw-bold me-2">Status:</span>
+                                <div class="spinner-border border-1 me-2 text-warning" role="status" style="width:14px; height:14px">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div><span class="text-warning">Processing</span>
+                            </div>
+                        }
+                        else if (item.Status.ToString().Equals("Success"))
+                        {
+                            <div class="d-flex align-items-center">
+                                <span class="fw-bold me-2">Status:</span>
+                                <span class="d-flex align-items-center text-success d-none d-sm-block"><i class="bi bi-check2-circle fs-6 me-2"></i>Your order has been delivered successfully.</span>
+                                <span class="d-flex align-items-center text-success d-block d-sm-none"><i class="bi bi-check2-circle fs-6 me-2"></i>Success.</span>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="d-flex align-items-center">
+                                <span class="fw-bold me-2">Status:</span>
+                                <span class="d-flex align-items-center text-danger d-none d-sm-block"><i class="bi bi-x-circle fs-6 me-2"></i>Your order has been denied</span>
+                                <span class="d-flex align-items-center text-danger d-block d-sm-none"><i class="bi bi-x-circle fs-6 me-2"></i>Denied</span>
+
+                            </div>
+                        }
+                    </div>
+                    <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
+                        <small class="fw-bold mb-2 mb-sm-0">Payment Type: <span class="fw-normal">@item.PaymentType</span></small>
+                        <small class="fw-bold">Total: <span class="fw-normal">@(string.Format("{0:C2}", item.TotalPrice))</span></small>
+                    </div>
+                </div>
+            </a>
+        }
+    </div>
+</div>

@@ -25,6 +25,19 @@ namespace SStore.Models
         {
         }
 
+        public DbSet<ProductBrand> ProductBrands { get; set; }
+        public DbSet<ProductCategory> ProductCategories { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<UserInfo> UserInfos { get; set; }
+        /*        public DbSet<Cart> Carts { get; set; }
+                public DbSet<CartDetail> CartDetails { get; set; }*/
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderDetail> OrderDetails { get; set; }
+        public DbSet<Feedback> Feedbacks { get; set; }
+        public DbSet<Slide> Slides { get; set; }
+
+
+
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();

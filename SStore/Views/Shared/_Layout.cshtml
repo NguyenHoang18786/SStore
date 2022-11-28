@@ -1,44 +1,259 @@
 ﻿<!DOCTYPE html>
-<html>
+<html class="h-100">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - My ASP.NET Application</title>
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
-
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+    <link href="~/Public/css/custom.css" rel="stylesheet" />
+    @RenderSection("header", required: false)
+    @RenderSection("scripts", required: false)
 </head>
-<body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse" title="more options">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+<!-- Section Header -->
+<body class="d-flex flex-column min-vh-100">
+    <section class="header clearfix bg-white">
+        <div class="container-lg">
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-sm-between py-2">
+                <!-- LOGO -->
+                <div class="d-flex align-items-center">
+                    <a href="@Url.Action("Index", "Home", new { area = "" })" class="col-md-auto text-dark text-decoration-none">
+                        <h1 class="store-logo-homepage mb-0">SStore</h1>
+                    </a>
+                </div>
+                <div class="d-none d-sm-block">
+                    @using (Html.BeginForm("Index", "allProduct", FormMethod.Get))
+                    {
+                        <form class="d-flex col-md-auto justify-content-center">
+                            <div class="d-flex align-items-center">
+                                <input type="search" name="searchString" class="bd-search form-control me-2 form-control-dark" placeholder="search product..." />
+                                <button class="btn btn-outline-success" type="submit">Search</button>
+                            </div>
+                        </form>
+                    }
+                </div>
+                <div class="d-none d-sm-block">
+                    <div class="d-flex col-md-auto text-end">
+                        @Html.Partial("_LoginPartial")
+                    </div>
+                </div>
             </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                </ul>
-                @Html.Partial("_LoginPartial")
+            <div class="d-block d-sm-none d-flex justify-content-center mb-2">
+                @using (Html.BeginForm("Index", "allProduct", FormMethod.Get))
+                {
+                    <form class="d-flex col-md-auto justify-content-center">
+                        <div class="d-flex align-items-center">
+                            <input type="search" name="searchString" class="bd-search form-control me-2 form-control-dark" placeholder="search product..." />
+                            <button class="btn btn-outline-success" type="submit">Search</button>
+                        </div>
+                    </form>
+                }
             </div>
         </div>
-    </div>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
-    </div>
+    </section>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
+    <!-- Section Navigation Bar -->
+    <section class="navigation-bar bg-black sticky-top">
+        <div class="container-fluid">
+            <nav class="navbar navbar-dark navbar-expand-lg bg-black">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="d-flex justify-content-end col-md-auto text-end d-block d-sm-none">
+                    @Html.Partial("_LoginPartial")
+                </div>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav mx-auto">
+                        <li class="me-4">
+                            <a class="nav-link text-white store-navigation-link-homepage" href="@Url.Action("Index", "Home", new { area = "" })">
+                                <i class="bi bi-house-door"></i>
+                                Home
+                            </a>
+                        </li>
+                        <li class="me-4">
+                            <a class="nav-link text-white store-navigation-link-homepage" href="@Url.Action("Index", "AllProduct", new { area = "" })">
+                                All Product
+                            </a>
+                        </li>
+                        <li class="me-4">
+                            <a class="nav-link text-white store-navigation-link-homepage" href="@Url.Action("Shoes", "AllProduct", new { area = "" })">
+                                Shoes
+                            </a>
+                        </li>
+                        <li class="me-4">
+                            <a class="nav-link text-white store-navigation-link-homepage" href="@Url.Action("Hat", "AllProduct", new { area = "" })">
+                                Hat
+                            </a>
+                        </li>
+                        <li class="me-4">
+                            <a class="nav-link text-white store-navigation-link-homepage" href="@Url.Action("Shirt", "AllProduct", new { area = "" })">
+                                Shirt
+                            </a>
+                        </li>
+                        <li class="me-4">
+                            <a class="nav-link text-white store-navigation-link-homepage" href="@Url.Action("Accessories", "AllProduct", new { area = "" })">
+                                Accessories
+                            </a>
+                        </li>
+                        <li class="me-4">
+                            <a class="nav-link text-white store-navigation-link-homepage" href="@Url.Action("Index", "FeedbackClient", new { area = "" }, null)">
+                                Feedback
+                            </a>
+                        </li>
+                        @if (User.IsInRole("Manager"))
+                        {
+                            <li class="me-4">
+                                <a class="nav-link text-white store-navigation-link-homepage" href="@Url.Action("Index", "Dashboard", new { area = "Admin" }, null)">
+                                    Dashboard
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </section>
+
+    <!-- Section Content -->
+    <section class="content bg-white">
+        @RenderBody()
+        <div class="position-fixed bottom-0 end-0">
+            <a href="@Url.Action("Index", "ShoppingCart", new { area = ""})" class="me-2 me-md-3 ms-2 mb-2 mb-md-3 mb-5 mb-sm-0 position-relative btn cart-button">
+                <i class="bi bi-cart3 fs-3 cart-text"></i>
+                @Html.Action("BagCart", "ShoppingCart", new { area = "" })
+            </a>
+        </div>
+    </section>
+
+    <!-- Section Footer -->
+    <section class="footer bg-black mt-auto">
+        <div class="container-lg">
+            <footer class="d-flex flex-wrap justify-content-between py-5">
+                <div class="me-3 me-sm-5">
+                    <a href="@Url.Action("Index", "Home", new { area = "" })" class="text-decoration-none text-white">
+                        <h1 class="pb-3 store-logo-homepage">SStore</h1>
+                        <p>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-telephone me-2" viewBox="0 0 16 16">
+                                <path d="M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.568 17.568 0 0 0 4.168 6.608 17.569 17.569 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.678.678 0 0 0-.58-.122l-2.19.547a1.745 1.745 0 0 1-1.657-.459L5.482 8.062a1.745 1.745 0 0 1-.46-1.657l.548-2.19a.678.678 0 0 0-.122-.58L3.654 1.328zM1.884.511a1.745 1.745 0 0 1 2.612.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z" />
+                            </svg>0935466639
+                        </p>
+                        <p>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt me-2" viewBox="0 0 16 16">
+                                <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z" />
+                                <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+                            </svg>650 Ngo Quyen, An Hai Bac, Son Tra, Da Nang
+                        </p>
+                        <div class="d-flex flex-nowrap">
+                            <i class="bi bi-envelope me-2"></i>
+                            <p class="text-break">
+                                hoangngcd18786@fpt.edu.vn
+                            </p>
+                        </div>
+                    </a>
+                </div>
+                <div class="me-5 mt-sm-0 mt-3">
+                    <h5 class="text-white">Information</h5>
+                    <ul class="nav flex-column">
+                        <li class="nav-item mb-2">
+                            <a href="@Url.Action("Index", "Home", new { area = "" })" class="nav-link p-0 text-muted">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+                                </svg> Home page
+                            </a>
+                        </li>
+                        <li class="nav-item mb-2">
+                            <a href="#" class="nav-link p-0 text-muted">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+                                </svg> About
+                            </a>
+                        </li>
+                        <li class="nav-item mb-2">
+                            <a href="@Url.Action("Index", "Allproduct", new { area = "" })" class="nav-link p-0 text-muted">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+                                </svg> Products
+                            </a>
+                        </li>
+                        <li class="nav-item mb-2">
+                            <a href="@Url.Action("Policy", "Home", new { area = "" })" class="nav-link p-0 text-muted">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+                                </svg> FAQs
+                            </a>
+                        </li>
+                        <li class="nav-item mb-2">
+                            <a href="@Url.Action("Index", "FeedbackClient", new { area = "" })" class="nav-link p-0 text-muted">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+                                </svg> Contacts
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="me-sm-5 mt-sm-0 mt-3 me-0">
+                    <h5 class="text-white">SStore Policies</h5>
+                    <ul class="nav flex-column">
+                        <li class="nav-item mb-2">
+                            <a href="@Url.Action("Policy", "Home", new { area = "" })" class="nav-link p-0 text-muted">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+                                </svg> Privacy Policy
+                            </a>
+                        </li>
+                        <li class="nav-item mb-2">
+                            <a href="@Url.Action("Policy", "Home", new { area = "" })" class="nav-link p-0 text-muted">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+                                </svg> Return & Refund Policy
+                            </a>
+                        </li>
+                        <li class="nav-item mb-2">
+                            <a href="@Url.Action("Policy", "Home", new { area = "" })" class="nav-link p-0 text-muted">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+                                </svg> Payment policy
+                            </a>
+                        </li>
+                        <li class="nav-item mb-2">
+                            <a href="@Url.Action("Policy", "Home", new { area = "" })" class="nav-link p-0 text-muted">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+                                </svg> Shipping Policy
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </footer>
+        </div>
+        <div class="bg-dark">
+            <div class="container bg-dark py-3">
+                <div class="d-flex justify-content-md-between flex-md-row flex-column align-items-center justify-content-center">
+                    <div class="mb-0 text-muted p-1 text-center">
+                        <p class="m-0 d-none d-sm-block" style="font-family: Arial, Helvetica, sans-serif">&copy; Copyright by <b class="text-white">SStore</b> | Website design by NHoang</p>
+                        <p class="m-0 d-block d-sm-none" style="font-family: Arial, Helvetica, sans-serif">&copy; Copyright by <b class="text-white">SStore</b><br />Website design by NHoang</p>
+                    </div>
+                    <div class="align-self-center mb-0 text-muted fs-5">
+                        <a href="https://www.facebook.com/NG.nguyenhoang/" class="text-muted text-decoration-none mx-2" target="_blank">
+                            <i class="bi bi-facebook"></i>
+                        </a>
+                        <a href="https://www.instagram.com/nh.hoangnguyen/" class="text-muted text-decoration-none mx-2" target="_blank">
+                            <i class="bi bi-instagram"></i>
+                        </a>
+                        <a href="#" class="text-muted text-decoration-none mx-2">
+                            <i class="bi bi-twitter"></i>
+                        </a>
+                        <a href="https://www.youtube.com/channel/UCVQhPuumdi48fPIlxdPOnrw" class="text-muted text-decoration-none mx-2" target="_blank">
+                            <i class="bi bi-youtube"></i>
+                        </a>
+                        <a href="https://www.youtube.com/channel/UCVQhPuumdi48fPIlxdPOnrw" class="text-muted text-decoration-none mx-2" target="_blank">
+                            <i class="bi bi-google"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script src="~/Scripts/bootstrap.bundle.min.js"></script>
 </body>
 </html>

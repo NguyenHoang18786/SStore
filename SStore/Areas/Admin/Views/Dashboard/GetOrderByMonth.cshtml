@@ -1,0 +1,46 @@
+﻿<div class="chartCard">
+    <div class="chartBox2">
+        <canvas id="GetOrderByMonth"></canvas>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var ListMonth = [
+        "@ViewBag.SixthMonthName",
+        "@ViewBag.FifthMonthName",
+        "@ViewBag.FourthMonthName",
+        "@ViewBag.ThirtMonthName",
+        "@ViewBag.SecondMonthName",
+        "@ViewBag.ThisMonthName",
+    ];
+
+    const GetOrderByMonthData = {
+        labels: ListMonth,
+        datasets: [{
+            label: 'Income over 6 months',
+            backgroundColor: 'rgb(255, 99, 132)',
+            borderColor: 'rgb(255, 99, 132)',
+            tension: 0.4,
+            data: [@ViewBag.SixthMonth, @ViewBag.FifthMonth, @ViewBag.FourthMonth, @ViewBag.ThirtMonth, @ViewBag.SecondMonth, @ViewBag.ThisMonth],
+        }]
+    };
+    const configGetOrderByMonthChart = {
+        type: 'line',
+        data: GetOrderByMonthData,
+        options: {
+            maintainAspectRatio: false,
+            responsive: true,
+            scales: {
+                y: {
+                    type: 'linear',
+                    display: true,
+                    position: 'right',
+                },
+            }
+        },
+    };
+    var GetOrderByMonthChart = new Chart(
+        document.getElementById('GetOrderByMonth'),
+        configGetOrderByMonthChart
+    );
+</script>

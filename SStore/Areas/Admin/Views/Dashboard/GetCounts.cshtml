@@ -1,0 +1,123 @@
+﻿@{
+    decimal nullVal = 0.001M;
+    var thisMonthUser = ViewBag.ThisMonthUsers + nullVal;
+    var lastMonthUser = ViewBag.LastMonthUsers + nullVal;
+    var IncreaseUser = String.Format("{0:P0}", ((thisMonthUser - lastMonthUser) / lastMonthUser));
+    var DecreaseUser = String.Format("{0:P0}", -((thisMonthUser - lastMonthUser) / lastMonthUser));
+    var thisMonthOrders = ViewBag.ThisMonthOrders + 0.0001;
+    var lastMonthOrders = ViewBag.LastMonthOrders + 0.0001;
+    var IncreaseOrder = String.Format("{0:P1}", ((thisMonthOrders - lastMonthOrders) / lastMonthOrders));
+    var DecreaseOrder = String.Format("{0:P1}", -((thisMonthOrders - lastMonthOrders) / lastMonthOrders));
+    var thisMonthCurrency = ViewBag.ThisMonthCurrency + nullVal;
+    var lastMonthCurrency = ViewBag.LastMonthCurrency + nullVal;
+    var total = String.Format("{0:C2}", thisMonthCurrency);
+    var IncreaseIncome = String.Format("{0:P1}", ((thisMonthCurrency - lastMonthCurrency) / lastMonthCurrency));
+    var DecreaseIncome = String.Format("{0:P1}", -((thisMonthCurrency - lastMonthCurrency) / lastMonthCurrency));
+    var thisMonthProduct = ViewBag.ThisMonthProduct + nullVal;
+    var lastMonthProduct = ViewBag.LastMonthProduct + nullVal;
+    var IncreaseProduct = String.Format("{0:P0}", ((thisMonthProduct - lastMonthProduct) / lastMonthProduct));
+    var DecreaseProduct = String.Format("{0:P0}", -((thisMonthProduct - lastMonthProduct) / lastMonthProduct));
+}
+<div class="row">
+    <div class="col-xl-3 col-sm-6">
+        <div class="card bg-white text-black mb-4">
+            <div class="card-body pt-1">
+                <div class="d-flex justify-content-between align-items-center text-secondary text-uppercase mb-2" style="font-size: 14px">
+                    <p class="m-0">Users</p>
+                    <i class="bi bi-person-lines-fill text-primary fs-4"></i>
+                </div>
+                <div class="d-flex align-items-center">
+                    <p class="text-black stretched-link fw-bolder fs-6 m-0 mb-1">@ViewBag.Users</p>
+                </div>
+                @if (thisMonthUser > lastMonthUser)
+                {
+                    <p class="m-0 small" style="color: #48e120 "><i class="bi bi-arrow-up"></i>@IncreaseUser <span class="fw-lighter">Since last month</span></p>
+                }
+                else if (thisMonthUser < lastMonthUser)
+                {
+                    <p class="m-0 small" style="color: #e12424"><i class="bi bi-arrow-down"></i>@DecreaseUser <span class="fw-lighter">Since last month</span></p>
+                }
+                else
+                {
+                    <p class="m-0 small" style="color: #808080"><i class="bi bi-arrow-up"></i>00.0%</p>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-sm-6">
+        <div class="card bg-white text-black mb-4">
+            <div class="card-body pt-1">
+                <div class="d-flex justify-content-between align-items-center text-secondary text-uppercase mb-2" style="font-size: 14px">
+                    <p class="m-0">Orders</p>
+                    <i class="bi bi-cart-plus text-primary fs-4"></i>
+                </div>
+                <div class="d-flex align-items-center">
+                    <p class="text-black stretched-link fw-bolder fs-6 m-0 mb-1">@ViewBag.ThisMonthOrders</p>
+                </div>
+                @if (thisMonthOrders > lastMonthOrders)
+                {
+                    <p class="m-0 small" style="color: #48e120 "><i class="bi bi-arrow-up"></i>@IncreaseOrder <span class="fw-lighter">Since last month</span></p>
+                }
+                else if (thisMonthOrders < lastMonthOrders)
+                {
+                    <p class="m-0 small" style="color: #e12424"><i class="bi bi-arrow-down"></i>@DecreaseOrder <span class="fw-lighter">Since last month</span></p>
+                }
+                else
+                {
+                    <p class="m-0 small" style="color: #808080"><i class="bi bi-arrow-up"></i>00.0%</p>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-sm-6">
+        <div class="card bg-white text-black mb-4">
+            <div class="card-body pt-1">
+                <div class="d-flex justify-content-between align-items-center text-secondary text-uppercase mb-2" style="font-size: 14px">
+                    <p class="m-0">Income</p>
+                    <i class="bi bi-currency-dollar text-primary fs-4"></i>
+                </div>
+                <div class="d-flex align-items-center">
+                    <p class="text-black stretched-link fw-bolder fs-6 m-0 mb-1">@total</p>
+                </div>
+                @if (thisMonthCurrency > lastMonthCurrency)
+                {
+                    <p class="m-0 small" style="color: #48e120 "><i class="bi bi-arrow-up"></i>@IncreaseIncome <span class="fw-lighter">Since last month</span></p>
+                }
+                else if (thisMonthCurrency < lastMonthCurrency)
+                {
+                    <p class="m-0 small" style="color: #e12424"><i class="bi bi-arrow-down"></i>@DecreaseIncome <span class="fw-lighter">Since last month</span></p>
+
+                }
+                else
+                {
+                    <p class="m-0 small" style="color: #808080"><i class="bi bi-arrow-up"></i>00.0%</p>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-sm-6">
+        <div class="card bg-white text-black mb-4">
+            <div class="card-body pt-1">
+                <div class="d-flex justify-content-between align-items-center text-secondary text-uppercase mb-2" style="font-size: 14px">
+                    <p class="m-0">Products</p>
+                    <i class="bi bi-diagram-3 text-primary fs-4"></i>
+                </div>
+                <div class="d-flex align-items-center">
+                    <p class="text-black stretched-link fw-bolder fs-6 m-0 mb-1">@ViewBag.Products</p>
+                </div>
+                @if (thisMonthProduct > lastMonthProduct)
+                {
+                    <p class="m-0 small" style="color: #48e120 "><i class="bi bi-arrow-up"></i>@IncreaseProduct <span class="fw-lighter">Since last month</span></p>
+                }
+                else if (thisMonthProduct < lastMonthProduct)
+                {
+                    <p class="m-0 small" style="color: #e12424"><i class="bi bi-arrow-down"></i>@DecreaseProduct <span class="fw-lighter">Since last month</span></p>
+                }
+                else
+                {
+                    <p class="m-0 small" style="color: #808080"><i class="bi bi-arrow-up"></i>00.0%</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>

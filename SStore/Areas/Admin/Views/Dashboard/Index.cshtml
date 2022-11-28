@@ -1,0 +1,52 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/Scripts/chart.min.js"></script>
+
+<div class="container-fluid my-2">
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item breadcrumb-client-active">Dashboard</li>
+        </ol>
+    </nav>
+    <h1 class="text-center my-3 admin-page-title text-uppercase m-3 mb-sm-4">Dashboard</h1>
+    @Html.Action("GetCounts", "Dashboard")
+    <main>
+        <div class="row">
+            <div class="col-xxl-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-chart-area me-1"></i>
+                        Income
+                    </div>
+                    <div class="card-body p-1 p-sm-3">
+                        @Html.Action("GetOrderByWeek", "Dashboard")
+                    </div>
+                </div>
+            </div>
+            <div class="col-xxl-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-chart-bar me-1"></i>
+                        Top Product views
+                    </div>
+                    <div class="card-body p-1 p-sm-3">
+                        @Html.Action("GetProductView", "Dashboard")
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-chart-area me-1"></i>
+                Income
+            </div>
+            <div class="card-body p-1 p-sm-3">
+                @Html.Action("GetOrderByMonth", "Dashboard")
+            </div>
+        </div>
+    </main>
+</div>

@@ -1,0 +1,20 @@
+﻿@{
+    var orderCount = ViewBag.OrdersCount;
+}
+
+@if (orderCount < 1)
+{
+    <span class="d-flex align-items-center text-secondary"><i class="bi bi-bookmark-star me-1"></i><span>Member</span></span>
+}
+else if (orderCount >= 1 && orderCount <= 3)
+{
+    <span class="d-flex align-items-center" style="color: #BDC3C7"><i class="bi bi-award me-1"></i><span>Silver</span></span>
+}
+else if (orderCount > 3 && orderCount <= 5)
+{
+    <span class="d-flex align-items-center" style="color: #FFD700"><i class="bi bi-stars me-1"></i><span>Gold</span></span>
+}
+else
+{
+    <span class="d-flex align-items-center" style="color: #B9F2FF"><i class="bi bi-gem me-1"></i><span>Diamond</span></span>
+}

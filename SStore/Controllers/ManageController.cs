@@ -15,6 +15,7 @@ namespace SStore.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        ApplicationDbContext db = new ApplicationDbContext();
 
         public ManageController()
         {
@@ -73,6 +74,14 @@ namespace SStore.Controllers
                 BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
             };
             return View(model);
+        }
+
+        public PartialViewResult MemberShip()
+        {
+            var userId = User.Identity.GetUserId();
+            var orders = db.Orders.Where(o => o.UserId == userId).ToList();
+            ViewBag.OrdersCount = orders.Count();
+            return PartialView();
         }
 
         //

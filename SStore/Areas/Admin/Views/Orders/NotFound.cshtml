@@ -1,0 +1,44 @@
+﻿@model PagedList.IPagedList<SStore.Models.ProductBrand>
+@using PagedList.Mvc;
+@using PagedList;
+@{
+    ViewBag.Title = "NotFound";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid my-2">
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Dashboard", new { area = "Admin" })" class="breadcrumb-client">Dashboard</a></li>
+            <li class="breadcrumb-item breadcrumb-client-active">Orders</li>
+        </ol>
+    </nav>
+    <h1 class="text-uppercase text-center admin-page-title mb-3">Orders Management</h1>
+    <div class="row">
+        <div class="col">
+        </div>
+        <div class="col-xxl-9">
+            <div class="d-flex justify-content-center align-items-center">
+                @using (Html.BeginForm("Index", "Orders", FormMethod.Get))
+                {
+                    <form class="d-flex col-md-auto mb-2 justify-content-center mb-md-0">
+                        <div class="d-flex align-items-center mb-2 mb-sm-0">
+                            <input type="search" name="orderIdSearch" class="bd-search form-control me-1 form-control-dark" placeholder="Search ID ..." />
+                            <button class="btn btn-outline-success" type="submit">Search</button>
+                        </div>
+                    </form>
+                }
+            </div>
+            <div class="shadow p-3 mb-5 bg-body rounded p-4 p-sm-5 mt-sm-4 mt-3">
+                <h1 class="text-error text-center">No order found, try searching again</h1>
+                <div class="d-flex justify-content-center">
+                    <a href="@Url.Action("Index", "Orders", new{ area = "Admin" })" class="btn back-page-button mt-4">
+                        Back to List
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+        </div>
+    </div>
+</div>

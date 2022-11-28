@@ -1,0 +1,43 @@
+﻿@model SStore.Models.ProductCategory
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid my-2">
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Dashboard", new { area = "Admin" })" class="breadcrumb-client">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "ProductCategory", new { area = "Admin" })" class="breadcrumb-client">Categories</a></li>
+            <li class="breadcrumb-item breadcrumb-client-active">Create</li>
+        </ol>
+    </nav>
+    <h1 class="my-3 text-center admin-page-title">ADD NEW CATEGORY</h1>
+    @using (Html.BeginForm("Create", "ProductCategory", FormMethod.Post))
+    {
+        <div class="d-flex justify-content-center">
+            <div class="container-fluid" style="max-width:500px">
+                <form>
+                    <div class="mb-2">
+                        <label for="CategoryName" class="form-label fw-bold">
+                            @Html.LabelFor(c => c.CategoryName, "Category Name")<span class="fw-normal text-danger">*</span>
+                        </label>
+                        @Html.TextBoxFor(c => c.CategoryName, new { @class = "form-control", @placeholder = "Enter category name", required = "required" })
+                        @Html.ValidationMessageFor(c => c.CategoryName, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="mb-3">
+                        <label for="Description" class="form-label fw-bold">
+                            @Html.LabelFor(c => c.Description, "Description")
+                        </label>
+                        @Html.TextBoxFor(c => c.Description, new { @class = "form-control", @placeholder = "Enter category description" })
+                        @Html.ValidationMessageFor(c => c.Description, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="mb-3">
+                        <button type="submit" class="btn sub-button"><span class="sub-button-text">Add</span></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    }
+</div>

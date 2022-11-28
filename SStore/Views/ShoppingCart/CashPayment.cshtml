@@ -1,0 +1,205 @@
+﻿@using SStore.Models;
+@model SStore.Models.Order
+
+@{
+    ViewBag.Title = "CheckOut";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-lg mt-2 mb-sm-5 mb-3">
+    @* Breadcrumb *@
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb ms-2">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home", new {area = ""})" class="breadcrumb-client"><i class="bi bi-house-door"></i> Home</a></li>
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "ShoppingCart", new {area = ""})" class="breadcrumb-client">Cart</a></li>
+            <li class="breadcrumb-item breadcrumb-client-active">Checkout</li>
+        </ol>
+    </nav>
+
+    <h2 class="text-uppercase text-center page-title mb-sm-2 mb-3">CheckOut</h2>
+    @if ((Session["Cart"] != null) && (ViewBag.CartItemCount != 0))
+    {
+        <div class="table-responsive d-none d-sm-block">
+            <table class="table table-hover my-2">
+                <thead>
+                    <tr>
+                        <th class="text-center text-nowrap">
+                            Image
+                        </th>
+                        <th class="text-center text-nowrap" style="min-width: 150px">
+                            Name
+                        </th>
+                        <th class="text-center text-nowrap" style="min-width: 130px">
+                            Price
+                        </th>
+                        <th class="text-center text-nowrap" style="min-width: 100px">
+                            Quantity
+                        </th>
+                        <th class="text-center text-nowrap" style="min-width: 140px">
+                            Sub total
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var cart in (List<Cart>)Session["Cart"])
+                    {
+                        <tr>
+                            <td class="text-center align-middle p-1 p-lg-2" style="max-width: 38px">
+                                <div class="image-hover img-overlay">
+                                    <a href="@Url.Action("Details", "AllProduct",  new { area = "", id = cart.Product.Id })" class="text-decoration-none">
+                                        <figure>
+                                            @if (cart.Product.Image == null)
+                                            {
+                                                <img src="@Url.Content("~/Image/noimage.png")" class="card-img-top" alt="...">
+                                            }
+                                            else
+                                            {
+                                                <img src="@Url.Content("~/Image/" + cart.Product.Image)" class="card-img-top" alt="...">
+                                            }
+                                            <div class="overlay">
+                                                @if (cart.Product.Image == null)
+                                                {
+                                                    <div class="img-overlay-text text-secondary" style="font-size:13px">Details</div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="img-overlay-text" style="font-size:13px">Details</div>
+                                                }
+                                            </div>
+                                        </figure>
+                                    </a>
+                                </div>
+                            </td>
+                            <td class="text-center align-middle text-nowrap">
+                                @cart.Product.ProductName
+                            </td>
+                            <td class="text-center align-middle text-nowrap">
+                                @(string.Format("{0:C2}", @cart.Product.Price))
+                            </td>
+                            <td class="text-center align-middle text-nowrap">
+                                @cart.Quantity
+                            </td>
+                            <td class="text-center align-middle">
+                                @(string.Format("{0:C2}", cart.Product.Price * cart.Quantity))
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td class="text-center fw-bold text-nowrap border-bottom-0 text-uppercase">Total</td>
+                        <td class="border-bottom-0"></td>
+                        <td class="border-bottom-0"></td>
+                        <td class="border-bottom-0"></td>
+                        <td class="text-center fw-bold text-nowrap border-bottom-0">
+                            @{
+                                List<Cart> temp = (List<Cart>)Session["Cart"];
+                                var total = String.Format("{0:C2}", temp.Sum(x => x.Quantity * x.Product.Price));
+                            }
+                            @total
+                        </td>
+                        <td class="border-bottom-0"></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        @* Display on screen <= 575 px*@
+        <div class="d-block d-sm-none">
+            <ol class="list-group">
+                @foreach (var cart in (List<Cart>)Session["Cart"])
+                {
+                    <li class="list-group-item d-flex justify-content-between align-items-start p-2">
+                        <div class="ms-2 me-auto">
+                            @if (cart.Product.Image == null)
+                            {
+                                <img src="~/Image/noimage.png" class="img-fluid product-image-management img-thumbnail mb-1" style="max-width:192px; min-height:100px" />
+                            }
+                            else
+                            {
+                                <img src="@Url.Content("~/Image/" + cart.Product.Image)" class="img-fluid product-image-management img-thumbnail mb-1" style="max-width:192px; min-height:100px" />
+                            }
+                            <p class="fw-bold my-1 product-cart-title">@cart.Product.ProductName</p>
+                            <p class="my-1">
+                                <span class="fw-bold">Price:</span> @(string.Format("{0:C2}", @cart.Product.Price))</p>
+                            <p class="my-1">
+                                <span class="fw-bold">Sub total:</span> @(string.Format("{0:C2}", cart.Product.Price * cart.Quantity))
+                            </p>
+                        </div>
+                        <span class="badge bg-secondary rounded-pill">@cart.Quantity</span>
+                    </li>
+                }
+            </ol>
+            <div class="d-flex justify-content-between align-items-center p-2 border border-2 border-secondary rounded mt-2">
+                <p class="fw-bold m-0 text-uppercase">Total</p>
+                <p class="m-0 fw-bold">@total</p>
+            </div>
+        </div>
+
+        @* Delivery infomation *@
+        <div class="d-flex justify-content-center mt-3">
+            <div class="container-fluid border rounded p-3" style="max-width: 500px; background-color: #FAFAFA ">
+                @using (Html.BeginForm("CashPayment", "ShoppingCart", FormMethod.Post))
+                {
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <form class="needs-validation" novalidate>
+                        <h4 class="text-center mb-3">Delivery Information</h4>
+                        <div class="form-horizontal" novalidate>
+                            <div class="mb-2">
+                                <label for="CustomerName" class="form-label fw-bold">
+                                    Customer Name<span class="fw-normal text-danger">*</span>
+                                </label>
+                                <input class="form-control" type="text" name="CustomerName" required>
+                                @Html.ValidationMessageFor(model => model.CustomerName, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="mb-2">
+                                <label for="CustomerPhone" class="form-label fw-bold">
+                                    Phone<span class="fw-normal text-danger">*</span>
+                                </label>
+                                <input class="form-control" type="text" name="CustomerPhone" required>
+                                @Html.ValidationMessageFor(model => model.CustomerPhone, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="mb-2">
+                                <label for="Title" class="form-label fw-bold">
+                                    Email
+                                </label>
+                                <input class="form-control" type="text" name="CustomerEmail">
+                                @Html.ValidationMessageFor(model => model.CustomerEmail, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="mb-3">
+                                <label for="DeliveryAddress" class="form-label fw-bold">
+                                    Delivery Address<span class="fw-normal text-danger">*</span>
+                                </label>
+                                <input class="form-control" type="text" name="DeliveryAddress" required>
+                                @Html.ValidationMessageFor(model => model.DeliveryAddress, "", new { @class = "text-danger" })
+                            </div>
+                            @{
+                                var totalPrice = temp.Sum(x => x.Quantity * x.Product.Price);
+                            }
+                            <input class="form-control" type="hidden" name="TotalPrice" value="@totalPrice">
+                            <div class="mb-2">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <button type="submit" class="btn sub-button"><span class="sub-button-text">Process Order</span></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                }
+            </div>
+        </div>
+        <div class="d-flex justify-content-between my-4">
+            <a href="@Url.Action("Index", "ShoppingCart", new {area = ""})" class="btn back-page-client"><span class="back-page-client-text"><i class="bi bi-arrow-left"></i> Cart</span></a>
+            @*            <a href="@Url.Action("Index", "AllProduct", new {area = ""})" class="btn sub-button"><span class="sub-button-text">Pay <i class="bi bi-arrow-right"></i></span></a>
+            *@
+        </div>
+    }
+    else
+    {
+        <div class="p-sm-5 p-3">
+            <h4 class="text-error text-center mb-4">There are no items in the cart. Return to the store to continue shopping.</h4>
+            <div class="d-flex justify-content-center">
+                <a href="@Url.Action("Index", "AllProduct", new {area = ""})" class="btn back-page-client"><span class="back-page-client-text">Back to shopping</span></a>
+            </div>
+        </div>
+    }
+</div>

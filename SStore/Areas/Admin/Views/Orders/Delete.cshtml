@@ -1,0 +1,193 @@
+﻿@model SStore.Models.Order
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid my-2">
+    @* Breadcrumb *@
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Dashboard", new { area = "Admin" })" class="breadcrumb-client">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Orders", new { area = "Admin" })" class="breadcrumb-client">Orders</a></li>
+            <li class="breadcrumb-item breadcrumb-client-active">Delete</li>
+        </ol>
+    </nav>
+    @* Header display responsive *@
+    <h3 class="d-none d-sm-block text-center m-0">Are you sure you want to delete this order?</h3>
+    <h4 class="d-block d-sm-none text-center m-0">Are you sure you want to delete this order?</h4>
+    @* Order Details *@
+    <div class="d-flex justify-content-center">
+        <div class="container-fluid" style="max-width:700px">
+            <div class="card mt-2 mt-sm-4 mb-1 mb-sm-2 rounded-0 border-dark">
+                <div class="card-header bg-transparent border-dark p-0">
+                    <div class="accordion accordion-flush" id="customerInfomation">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingThree">
+                                <button class="accordion-button py-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+                                    <div>
+                                        <h5 class="card-title mb-2">ORDER ID: <span>@Model.OrderId</span></h5>
+                                        <p class="m-0 fst-italic text-secondary">@Model.OrderDate</p>
+                                    </div>
+                                </button>
+                            </h2>
+                            <div id="collapseThree" class="accordion-collapse collapse show" aria-labelledby="headingThree" data-bs-parent="#customerInfomation">
+                                <div class="accordion-body">
+                                    <dl class="row mb-0">
+                                        <div class="mb-2 row">
+                                            <dt class="col-sm-4 text-nowrap d-flex align-items-center">Order Status:</dt>
+                                            <dd class="col-sm-8 d-flex align-items-center m-0">
+                                                @if (Model.Status.ToString().Equals("Processing"))
+                                                {
+                                                    <div class="text-warning d-flex align-items-center">
+                                                        <div class="spinner-border border-1 me-2" role="status" style="width:17px; height:17px">
+                                                            <span class="visually-hidden">Loading...</span>
+                                                        </div><span>Processing</span>
+                                                    </div>
+                                                }
+                                                else if (Model.Status.ToString().Equals("Success"))
+                                                {
+                                                    <div class="text-success d-flex align-items-center">
+                                                        <i class="bi bi-check2-circle fs-5 me-2"></i><span>Success</span>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="text-danger d-flex align-items-center">
+                                                        <i class="bi bi-x-circle fs-5 me-2"></i><span>Denied</span>
+                                                    </div>
+                                                }
+                                            </dd>
+                                        </div>
+                                        <div class="mb-2 row">
+                                            <dt class="col-sm-4 text-nowrap d-flex align-items-center">Payment Type:</dt>
+                                            <dd class="col-sm-8 font-monospace d-flex align-items-center m-0">
+                                                @Model.PaymentType
+                                            </dd>
+                                        </div>
+                                        <div class="row">
+                                            <dt class="col-sm-4 text-nowrap d-flex align-items-center">Payment Status:</dt>
+                                            <dd class="col-sm-8 d-flex align-items-center m-0">
+                                                @if (Model.PaymentStatus.ToString().Equals("Waiting"))
+                                                {
+                                                    <div class="text-warning d-flex align-items-center">
+                                                        <div class="spinner-border border-1 me-2" role="status" style="width:17px; height:17px">
+                                                            <span class="visually-hidden">Loading...</span>
+                                                        </div><span>Waiting</span>
+                                                    </div>
+                                                }
+                                                else if (Model.PaymentStatus.ToString().Equals("Paid"))
+                                                {
+                                                    <div class="text-success d-flex align-items-center">
+                                                        <i class="bi bi-check2-circle fs-5 me-2"></i><span>Paid</span>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="text-danger d-flex align-items-center">
+                                                        <i class="bi bi-x-circle fs-5 me-2"></i><span>Denied</span>
+                                                    </div>
+                                                }
+                                            </dd>
+                                        </div>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <div class="accordion accordion-flush" id="listItem">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingOne">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    List Item
+                                </button>
+                            </h2>
+                            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#listItem">
+                                <div class="accordion-body px-0 pb-0 pt-0">
+                                    <ol class="list-group rounded-0">
+                                        @foreach (var item in ViewBag.OrderDetails)
+                                        {
+                                            <li class="list-group-item d-flex justify-content-between align-items-start p-2">
+                                                <div class="me-auto">
+                                                    @if (item.Product.Image == null)
+                                                    {
+                                                        <img src="~/Image/noimage.png" class="img-fluid product-image-management img-thumbnail mb-1" style="max-width:192px; min-height:100px" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <img src="@Url.Content("~/Image/" + item.Product.Image)" class="img-fluid product-image-management img-thumbnail mb-1" style="max-width:192px; min-height:100px" />
+                                                    }
+                                                    <p class="fw-bold my-1 product-cart-title">@item.Product.ProductName</p>
+                                                    @*                                                    <p class="my-1">
+                                                            <span class="fw-bold">Quantity:</span> @item.Quantity
+                                                        </p>*@
+                                                    <p class="my-1">
+                                                        <span class="fw-bold">Price:</span> @(string.Format("{0:C2}", item.Product.Price))
+                                                    </p>
+                                                    <p class="my-1">
+                                                        <span class="fw-bold">Sub total:</span> @(string.Format("{0:C2}", item.Product.Price * item.Quantity))
+                                                    </p>
+                                                </div>
+                                                <span class="badge bg-secondary rounded-pill">@item.Quantity</span>
+                                            </li>
+                                        }
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer p-0 bg-transparent border-dark">
+                    <div class="accordion accordion-flush" id="customerInfomation">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingTwo">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                                    Delivery Infomation
+                                </button>
+                            </h2>
+                            <div id="collapseTwo" class="accordion-collapse collapse show" aria-labelledby="headingTwo" data-bs-parent="#customerInfomation">
+                                <div class="accordion-body">
+                                    <dl class="row mb-0">
+                                        <dt class="col-sm-4 text-nowrap">Recipient's name:</dt>
+                                        <dd class="col-sm-8">@Model.CustomerName</dd>
+                                        <dt class="col-sm-4 text-nowrap">Phone Number:</dt>
+                                        <dd class="col-sm-8">@Model.CustomerPhone</dd>
+                                        <dt class="col-sm-4 text-nowrap">Email:</dt>
+                                        <dd class="col-sm-8">
+                                            @if (@Model.CustomerEmail.IsEmpty())
+                                            {
+                                                <span>...</span>
+                                            }
+                                            else
+                                            {
+                                                @Model.CustomerEmail
+                                            }
+                                        </dd>
+                                        <dt class="col-sm-4 text-nowrap">Delivery Address:</dt>
+                                        <dd class="col-sm-8">@Model.DeliveryAddress</dd>
+                                        <dt class="col-sm-4 text-nowrap">COD:</dt>
+                                        <dd class="col-sm-8 mb-0">@(string.Format("{0:C2}", @Model.TotalPrice))</dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-2">
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-actions no-color">
+                        <input type="submit" value="Delete" class="btn delete-button" />
+                        <a href="@Url.Action("Index", "Orders", new { area = "Admin"})" class="btn back-page-button"><span class="back-page-button-text">Cancel</span></a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,209 @@
+﻿@model SStore.Models.Product
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var price = String.Format("{0:C2}", Model.Price);
+
+}
+
+<div class="container-lg mt-2 mb-sm-5 mb-3">
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb ms-2">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home", new {area = ""})" class="breadcrumb-client"><i class="bi bi-house-door"></i> Home</a></li>
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "AllProduct", new { area = "" })" class="breadcrumb-client">All Product</a></li>
+            <li class="breadcrumb-item breadcrumb-client-active fw-bolder">@Model.ProductName</li>
+        </ol>
+    </nav>
+    <div class="row my-3 mt-lg-5">
+        <div class="col-md-7">
+            @if (Model.Image == null)
+            {
+                <img src="~/Image/noimage.png" class="img-fluid img-thumbnail" />
+            }
+            else
+            {
+                <img src="@Url.Content("~/Image/" + Model.Image)" class="img-fluid img-thumbnail" />
+            }
+        </div>
+        <div class="col-md-5 mt-3 mt-md-0 d-flex flex-column justify-content-between">
+            @* Content *@
+            <div>
+                <div class=" d-flex flex-column align-items-center ">
+                    <h4 class="text-uppercase font-monospace text-center">@Model.ProductName</h4>
+                    <div>
+                        <p class="text-danger fw-bolder m-0 font-monospace"> @price </p>
+                        <hr style="height: 2px" class="mt-2" />
+                    </div>
+                </div>
+                @* Product Info display on screen >= 575px *@
+                <div class="d-none d-sm-block">
+                    <div class="d-flex justify-content-around">
+                        <div style="min-width: 120px">
+                            <p class="fw-bold mb-1 text-secondary">- Brand:</p>
+                            <p class="fw-bold mb-1 text-secondary">- Weight:</p>
+                            <p class="fw-bold mb-1 text-secondary">- Size:</p>
+                            <p class="fw-bold mb-1 text-secondary">- Color:</p>
+                            <p class="fw-bold mb-1 text-secondary">- Description:</p>
+                        </div>
+                        <div>
+                            <p class="mb-1 text-secondary">@Model.productBrand.BrandName</p>
+                            @if (Model.Weight == null)
+                            {
+                                <p class="mb-1 font-monospace text-secondary">...</p>
+                            }
+                            else
+                            {
+                                <p class="mb-1 text-secondary">@Model.Weight</p>
+                            }
+                            @if (Model.Size == null)
+                            {
+                                <p class="mb-1 font-monospace text-secondary">...</p>
+                            }
+                            else
+                            {
+                                <p class="mb-1 text-secondary">@Model.Size</p>
+                            }
+                            @if (Model.Color == null)
+                            {
+                                <p class="mb-1 font-monospace text-secondary">...</p>
+                            }
+                            else
+                            {
+                                <p class="mb-1 text-secondary">@Model.Color</p>
+                            }
+                            @if (Model.Description == null)
+                            {
+                                <p class="mb-1 font-monospace text-secondary">...</p>
+                            }
+                            else
+                            {
+                                <p class="mb-1 text-secondary text-break d-inline-block">@Model.Description</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+                @* Product Info display on screen < 575px *@
+                <div class="d-block d-sm-none">
+                    <div>
+                        <div>
+                            <p class="fw-bold mb-1 text-secondary text-center">Brand</p>
+                            <p class="mb-1 text-secondary text-center">@Model.productBrand.BrandName</p>
+                            <p class="fw-bold mb-1 text-secondary text-center">Weight</p>
+                            @if (Model.Weight == null)
+                            {
+                                <p class="mb-1 font-monospace text-secondary text-center">...</p>
+                            }
+                            else
+                            {
+                                <p class="mb-1 text-secondary text-center">@Model.Weight</p>
+                            }
+                            <p class="fw-bold mb-1 text-secondary text-center">Size</p>
+                            @if (Model.Size == null)
+                            {
+                                <p class="mb-1 font-monospace text-secondary text-center">...</p>
+                            }
+                            else
+                            {
+                                <p class="mb-1 text-secondary text-center">@Model.Size</p>
+                            }
+                            <p class="fw-bold mb-1 text-secondary text-center">Color</p>
+
+                            @if (Model.Color == null)
+                            {
+                                <p class="mb-1 font-monospace text-secondary text-center">...</p>
+                            }
+                            else
+                            {
+                                <p class="mb-1 text-secondary text-center">@Model.Color</p>
+                            }
+                            <p class="fw-bold mb-1 text-secondary text-center">Description</p>
+                            @if (Model.Description == null)
+                            {
+                                <p class="mb-1 font-monospace text-secondary text-center">...</p>
+                            }
+                            else
+                            {
+                                <p class="mb-1 text-secondary text-break text-center">@Model.Description</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @* End Content *@
+
+            @* Button *@
+            <div class="mt-3">
+                @if (Model.Status != true)
+                {
+                    <div class="d-flex flex-column">
+                        <a class="btn btn-danger fw-bolder disabled" href="#">Sold out</a>
+                    </div>
+
+                }
+                else
+                {
+                    <div class="d-flex flex-column">
+                        <a href="@Url.Action("OrderNow", "ShoppingCart", new { area = "", id = Model.Id})" class="btn add-to-cart-button mb-2"><span class="add-to-cart-text">Buy now</span></a>
+                        <a href="@Url.Action("AddToCart", "ShoppingCart", new { area = "", id = Model.Id})" class="btn add-to-cart-button align-bottom">
+                            <span class="add-to-cart-text">
+                                Add to cart &nbsp;<i class="bi bi-cart-plus"></i>
+                            </span>
+                        </a>
+                    </div>
+                }
+            </div>
+            @* End Button *@
+        </div>
+    </div>
+    <div class="d-flex flex-column align-items-center">
+        <div class="mt-5">
+            <h2 class="text-uppercase text-center page-title">Similar products</h2>
+            <hr class="mb-1" />
+        </div>
+    </div>
+    <div class="d-flex flex-row overflow-auto p-2">
+        @foreach (var item in ViewBag.RandomProduct)
+        {
+            var itemPrice = String.Format("{0:C2}", item.Price);
+            if (item.Image == null)
+            {
+                <a href="@Url.Action("Details", "AllProduct",  new { area = "", id = item.Id })" class="text-decoration-none">
+                    <div class="card list-recommend m-1">
+                        <div class="image-hover img-overlay">
+                            <figure>
+                                <img src="~/Image/noimage.png" class="img-fluid img-thumbnail card-img-top" />
+                                <div class="overlay">
+                                    <div class="img-overlay-text text-secondary">See details</div>
+                                </div>
+                            </figure>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text text-black mb-1 fw-bold text-truncate" title="@item.ProductName">@item.ProductName</p>
+                            <p class="card-text text-secondary mb-1">@itemPrice</p>
+                        </div>
+                    </div>
+                </a>
+            }
+            else
+            {
+                <a href="@Url.Action("Details", "AllProduct",  new { area = "", id = item.Id })" class="text-decoration-none">
+                    <div class="card list-recommend m-1">
+                        <div class="image-hover img-overlay">
+                            <figure>
+                                <img src="@Url.Content("~/Image/" + item.Image)" class="img-fluid img-thumbnail card-img-top" />
+                                <div class="overlay">
+                                    <div class="img-overlay-text">See details</div>
+                                </div>
+                            </figure>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text text-black mb-1 fw-bold text-truncate" title="@item.ProductName">@item.ProductName</p>
+                            <p class="card-text text-secondary mb-1">@itemPrice</p>
+                        </div>
+                    </div>
+                </a>
+            }
+        }
+    </div>
+</div>

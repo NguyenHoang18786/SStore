@@ -1,0 +1,135 @@
+﻿@model List<SStore.Models.Product>
+
+<div class="chartCard">
+    <div class="chartBox">
+        <canvas id="ProductViewsChart" class="d-none d-sm-block"></canvas>        
+        <canvas id="ProductViewsChart2" class="d-block d-sm-none"></canvas>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    var ctx = document.getElementById('ProductViewsChart').getContext('2d');
+
+
+    var ProductName = [];
+    var View = [];
+
+    @if(Model.Count>0)
+    {
+        foreach(var item in Model)
+                {
+                    @:ProductName.push("@item.ProductName");
+                    @:View.push(@item.View);
+                }
+    }
+
+    const labelsAdjusted = ProductName.map(label => label.split(' '));
+
+    var ProductViewsChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labelsAdjusted,
+            datasets: [{
+                label: 'Views',
+                data: View,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            responsive: true,
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        title: (context) => {
+                            return context[0].label.replaceAll(',',' ');
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+@*Display on screen <= 575px *@
+    var ctx = document.getElementById('ProductViewsChart2').getContext('2d');
+
+
+    var ProductName = [];
+    var View = [];
+
+    @if(Model.Count>0)
+    {
+        foreach(var item in Model)
+                {
+                    @:ProductName.push("@item.ProductName.Substring(0, 6)");
+                    @:View.push(@item.View);
+                }
+    }
+
+    var ProductViewsChart2 = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ProductName,
+            datasets: [{
+                label: 'Views',
+                data: View,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            responsive: true,
+            scales: {
+                x: {
+                    ticks: {
+                        font: {
+                            size: 9
+                        }
+                    }
+                },
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+        });
+</script>
+

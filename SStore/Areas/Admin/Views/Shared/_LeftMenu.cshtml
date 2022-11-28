@@ -1,0 +1,49 @@
+﻿<nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+    <div class="sb-sidenav-menu">
+        <div class="nav">
+            <hr class="m-0" />
+            <div class="sb-nav-link-icon">
+                <a class="nav-link" href="@Url.Action("Index", "Dashboard")">
+                    <i class="bi bi-speedometer2"></i>
+                    &nbsp;&nbsp;Dashboard
+                </a>
+            </div>
+            <div class="sb-nav-link-icon">
+                <a class="nav-link" href="@Url.Action("Index", "Product", new { area = "Admin" })">
+                    <i class="bi bi-list-ul"></i>
+                    &nbsp;&nbsp;Products
+                </a>
+            </div>
+            <div class="sb-nav-link-icon">
+                <a class="nav-link" href="@Url.Action("Index", "ProductCategory", new { area = "Admin" })">
+                    <i class="bi bi-tags"></i>
+                    &nbsp;&nbsp;Categories
+                </a>
+            </div>
+            <div class="sb-nav-link-icon">
+                <a class="nav-link" href="@Url.Action("Index", "ProductBrand", new { area = "Admin" })">
+                    <i class="bi bi-bootstrap"></i>
+                    &nbsp;&nbsp;Brands
+                </a>
+            </div>
+            <div class="sb-nav-link-icon">
+                <a class="nav-link" href="@Url.Action("Index", "Orders", new { area = "Admin" })">
+                    <i class="bi bi-list-ul"></i>
+                    &nbsp;&nbsp;Orders
+                </a>
+            </div>
+            <div class="sb-nav-link-icon">
+                <a class="nav-link" href="@Url.Action("Index", "Slide", new { area = "Admin" })">
+                    <i class="bi bi-file-easel"></i>
+                    &nbsp;&nbsp;Slides
+                </a>
+            </div>
+            <div class="sb-nav-link-icon">
+                <a class="nav-link" href="@Url.Action("Index", "Feedback", new { area = "Admin" })">
+                    <i class="bi bi-chat-left-text"></i>
+                    &nbsp;&nbsp;Feedbacks
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>

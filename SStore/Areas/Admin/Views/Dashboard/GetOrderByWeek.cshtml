@@ -1,0 +1,55 @@
+﻿<div class="chartCard">
+    <div class="chartBox">
+        <canvas id="WeekOrderViewChart"></canvas>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var WeekDays = [
+        "@ViewBag.SeventhDayName",
+        "@ViewBag.SixthDayName",
+        "@ViewBag.FifthDayName",
+        "@ViewBag.FourthDayName",
+        "@ViewBag.ThirtDayName",
+        "@ViewBag.SecondDayName",
+        "@ViewBag.TodayName",
+    ];
+    const WeekOrderViewChartData = {
+        labels: WeekDays,
+        datasets: [{
+            label: 'This week income',
+            backgroundColor: '#0acf97',
+            borderColor: '#0acf97',
+            tension: 0.3,
+            data: [@ViewBag.SeventhDay, @ViewBag.SixthDay, @ViewBag.FifthDay, @ViewBag.FourthDay, @ViewBag.ThirtDay, @ViewBag.SecondDay,  @ViewBag.Today],
+        },
+        {
+            label: 'Last week income',
+            backgroundColor: '#727cf5',
+            borderColor: '#727cf5',
+            tension: 0.3,
+            data: [@ViewBag.LastWeekSeventhDay, @ViewBag.LastWeekSixthDay, @ViewBag.LastWeekFifthDay, @ViewBag.LastWeekFourthDay, @ViewBag.LastWeekThirtDay, @ViewBag.LastWeekSecondDay,  @ViewBag.LastWeekFirstDay],
+            }
+        ]
+    };
+    const WeekOrderViewChartConfig = {
+        type: 'line',
+        data: WeekOrderViewChartData,
+        options: {
+            maintainAspectRatio: false,
+            responsive: true,
+            scales: {
+                y: {
+                    type: 'linear',
+                    display: true,
+                    position: 'right',
+                },
+            }
+        },
+    };
+    var WeekOrderViewChart = new Chart(
+        document.getElementById('WeekOrderViewChart'),
+        WeekOrderViewChartConfig
+    );
+</script>
+

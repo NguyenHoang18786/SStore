@@ -1,0 +1,31 @@
+﻿@model IEnumerable<SStore.Models.Slide>
+@{ Boolean first = true; }
+
+<div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+        @foreach (var item in Model)
+        {
+            <div class="carousel-item @( first ? "active" : "" )">
+                <a href="@Url.Action("Index", "AllProduct", new { area = ""})" target="_blank">
+                    <img src="@Url.Content("~/Image/" + item.Image)" style="max-height:700px; width:100%" class="store-slide" />
+                </a>
+
+                <div class="container">
+                    <div class="carousel-caption text-center">
+                        <h1 class="d-none d-sm-block">@item.Title</h1>
+                        <p class="d-none d-sm-block fst-italic">@item.Description</p>
+                    </div>
+                </div>
+            </div>
+            first = false;
+        }
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>

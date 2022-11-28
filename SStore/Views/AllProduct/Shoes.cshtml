@@ -1,0 +1,296 @@
+﻿@model PagedList.IPagedList<SStore.Models.Product>
+@using PagedList.Mvc;
+@using PagedList;
+
+
+@{
+    ViewBag.Title = "Shoes";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container-xl container-fluid mt-2 mb-sm-5 mb-3">
+    @* Breadcrumb *@
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home", new {area = ""})" class="breadcrumb-client"><i class="bi bi-house-door"></i> Home</a></li>
+            <li class="breadcrumb-item breadcrumb-client-active">Shoes</li>
+        </ol>
+    </nav>
+    @* End breadcrumb *@
+
+    <div class=" d-none d-xxl-block">
+        <div class="row">
+            <div class="col">
+                @using (Html.BeginForm("Shoes", "AllProduct", FormMethod.Get))
+                {
+                    <h5 class="mt-3">Brand</h5>
+                    <hr style="margin-top: 12px"/>
+                    <div class="mb-3">
+                        @foreach (var brand in ViewBag.ListBrand)
+                        {
+                            <div class="form-check me-3">
+                                <input class="form-check-input" type="checkbox" onchange="this.form.submit()" name="BrandFilter" value="@brand.BrandName" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    @brand.BrandName
+                                </label>
+                            </div>
+                        }
+                    </div>
+                    <h5 class="mb-0">Price</h5>
+                    <hr />
+                    <div class="form-check p-0 d-flex justify-content-start align-items-center">
+                        <span class="me-1">From:</span>
+                        <input class="form-control" type="text" name="LowPrice" value="0" id="flexCheckDefault">
+                        <span class="mx-1">-</span>
+                        <input class="form-control" type="text" name="HighPrice" value="0" id="flexCheckDefault">
+                        <button type="submit" class="btn btn-outline-success ms-1">Search</button>
+                    </div>
+                }
+            </div>
+            <div class="col-9">
+                <div class="d-flex justify-content-between align-items-end">
+                    <p class="mb-0">Showing @Model.FirstItemOnPage - @Model.LastItemOnPage of @Model.TotalItemCount products</p>
+                    <div class="dropdown">
+                        <button class="btn back-page-client dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="back-page-client-text">
+                                Sort by <i class="bi bi-sort-up-alt"></i>
+                            </span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <a href="@Url.Action("Shoes", new { sortOrder = ViewBag.NameSortParm })" class="dropdown-item">
+                                    Name
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Shoes", new { sortOrder = ViewBag.NameSortDescParm })" class="dropdown-item">
+                                    Name descending
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Shoes", new { sortOrder = ViewBag.PriceSortParm })" class="dropdown-item">
+                                    Price
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Shoes", new { sortOrder = ViewBag.PriceSortDescParm })" class="dropdown-item">
+                                    Price descending
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <hr />
+                <div class="d-flex flex-wrap justify-content-center">
+                    @foreach (var item in Model)
+                    {
+                        <div class="card m-3 shadow" style="width: 18rem;">
+                            <div class="image-hover img-overlay">
+                                <a href="@Url.Action("Details", "AllProduct",  new { area = "", id = item.Id })" class="text-decoration-none">
+                                    <figure>
+                                        @if (item.Image == null)
+                                        {
+                                            <img src="@Url.Content("~/Image/noimage.png")" class="card-img-top" alt="...">
+                                        }
+                                        else
+                                        {
+                                            <img src="@Url.Content("~/Image/" + item.Image)" class="card-img-top" alt="...">
+                                        }
+                                        <div class="overlay">
+                                            @if (item.Image == null)
+                                            {
+                                                <div class="img-overlay-text text-secondary">See details</div>
+                                            }
+                                            else
+                                            {
+                                                <div class="img-overlay-text">See details</div>
+                                            }
+                                        </div>
+                                    </figure>
+                                </a>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title text-truncate" title="@item.ProductName">@item.ProductName</h5>
+                                <p class="card-text">@item.Price $</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    @if (item.Status != true)
+                                    {
+                                        <button class="btn btn-danger fw-bolder disabled">Sold out</button>
+                                    }
+                                    else
+                                    {
+                                        <a href="@Url.Action("OrderNow", "ShoppingCart", new { area = "", id = item.Id})" class="btn add-to-cart-button"><span class="add-to-cart-text">Buy now</span></a>
+                                        <a href="@Url.Action("AddToCart", "ShoppingCart", new { area = "", id = item.Id})" class="btn add-to-cart-button align-bottom">
+                                            <span class="add-to-cart-text d-none d-sm-block">
+                                                Add to cart &nbsp;<i class="bi bi-cart-plus"></i>
+                                            </span>
+                                            <span class="add-to-cart-text d-block d-sm-none"><i class="bi bi-cart-plus"></i></span>
+                                        </a>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="d-none d-xxl-block mt-4">
+                    @Html.PagedListPager(Model, page => Url.Action("Shoes", new { page, sortOrder = ViewBag.CurrentSort, HighPrice = Request.QueryString["HighPrice"], LowPrice = Request.QueryString["LowPrice"], BrandFilter = Request.QueryString["BrandFilter"], CategoryFilter = Request.QueryString["CategoryFilter"] }),
+                        new PagedListRenderOptions()
+                        {
+                            LiElementClasses = new List<string> { "page-link" },
+                            UlElementClasses = new List<string> { "pagination", "d-flex", "flex-wrap" },
+                            MaximumPageNumbersToDisplay = 8,
+                            ContainerDivClasses = new List<string> { "d-flex", "justify-content-center" }
+                        })
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* Responsive display on screen <= 1400px *@
+    <div class="d-block d-xxl-none">
+        <div class="d-flex justify-content-sm-between justify-content-end align-items-end">
+            <p class="mb-0 text-end d-sm-block d-none">Showing @Model.FirstItemOnPage - @Model.LastItemOnPage of @Model.TotalItemCount products</p>
+            <div class="dropdown">
+                <button class="btn back-page-client dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="back-page-client-text">
+                        Sort by <i class="bi bi-sort-up-alt"></i>
+                    </span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                        <a href="@Url.Action("Shoes", new { sortOrder = ViewBag.NameSortParm })" class="dropdown-item">
+                            Name
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Shoes", new { sortOrder = ViewBag.NameSortDescParm })" class="dropdown-item">
+                            Name descending
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Shoes", new { sortOrder = ViewBag.PriceSortParm })" class="dropdown-item">
+                            Price
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Shoes", new { sortOrder = ViewBag.PriceSortDescParm })" class="dropdown-item">
+                            Price descending
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <hr />
+        <div class="d-flex flex-wrap justify-content-center">
+            @foreach (var item in Model)
+            {
+                <div class="card m-3 shadow" style="width: 17rem;">
+                    <div class="image-hover img-overlay">
+                        <a href="@Url.Action("Details", "AllProduct",  new { area = "", id = item.Id })" class="text-decoration-none">
+                            <figure>
+                                @if (item.Image == null)
+                                {
+                                    <img src="@Url.Content("~/Image/noimage.png")" class="card-img-top" alt="...">
+                                }
+                                else
+                                {
+                                    <img src="@Url.Content("~/Image/" + item.Image)" class="card-img-top" alt="...">
+                                }
+                                <div class="overlay">
+                                    <div class="img-overlay-text">See details</div>
+                                </div>
+                            </figure>
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title text-truncate" title="@item.ProductName">@item.ProductName</h5>
+                        <p class="card-text">@item.Price $</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            @if (item.Status != true)
+                            {
+                                <button class="btn btn-danger fw-bolder disabled">Sold out</button>
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("OrderNow", "ShoppingCart", new { area = "", id = item.Id})" class="btn add-to-cart-button"><span class="add-to-cart-text">Buy now</span></a>
+                                <a href="@Url.Action("AddToCart", "ShoppingCart", new { area = "", id = item.Id})" class="btn add-to-cart-button align-bottom">
+                                    <span class="add-to-cart-text d-none d-sm-block">
+                                        Add to cart &nbsp;<i class="bi bi-cart-plus"></i>
+                                    </span>
+                                    <span class="add-to-cart-text d-block d-sm-none"><i class="bi bi-cart-plus"></i></span>
+                                </a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    @* Responsive display on screen <= 1400px end *@
+
+    @* Paging and responsive paging *@
+    <div class="d-none d-sm-block d-xxl-none mt-4">
+        @Html.PagedListPager(Model, page => Url.Action("Shoes", new { page, sortOrder = ViewBag.CurrentSort, HighPrice = Request.QueryString["HighPrice"], LowPrice = Request.QueryString["LowPrice"], BrandFilter = Request.QueryString["BrandFilter"], CategoryFilter = Request.QueryString["CategoryFilter"] }),
+                  new PagedListRenderOptions()
+                  {
+                      LiElementClasses = new List<string> { "page-link" },
+                      UlElementClasses = new List<string> { "pagination", "d-flex", "flex-wrap" },
+                      MaximumPageNumbersToDisplay = 5,
+                      ContainerDivClasses = new List<string> { "d-flex", "justify-content-center" }
+                  })
+    </div>
+    <div class="d-block d-sm-none mt-3">
+        @Html.PagedListPager(Model, page => Url.Action("Shoes", new { page, sortOrder = ViewBag.CurrentSort, HighPrice = Request.QueryString["HighPrice"], LowPrice = Request.QueryString["LowPrice"], BrandFilter = Request.QueryString["BrandFilter"], CategoryFilter = Request.QueryString["CategoryFilter"] }),
+                  new PagedListRenderOptions()
+                  {
+                      LiElementClasses = new List<string> { "page-link" },
+                      UlElementClasses = new List<string> { "pagination", "d-flex", "flex-wrap" },
+                      MaximumPageNumbersToDisplay = 3,
+                      DisplayEllipsesWhenNotShowingAllPageNumbers = false,
+                      ItemSliceAndTotalFormat = "Showing items {0} through {1} of {2}.",
+                      ContainerDivClasses = new List<string> { "d-flex", "justify-content-center" }
+                  })
+    </div>
+    @* Paging and responsive paging end *@
+
+    @* Sorting and filtre display on screen >= 1400px *@
+    <div class="position-fixed top-50 end-0 translate-middle-y d-block d-xxl-none">
+        <button class="btn sub-button" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">
+            <i class="bi bi-funnel sub-button-text"></i>
+        </button>
+
+    </div>
+    <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
+        <div class="offcanvas-header pb-0">
+            <h4 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Filtre</h4>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        @using (Html.BeginForm("Shoes", "AllProduct", FormMethod.Get))
+        {
+            <div class="offcanvas-body">
+                <h5 class="mt-2">Brand</h5>
+                <hr />
+                <div class="mb-3">
+                    @foreach (var brand in ViewBag.ListBrand)
+                    {
+                        <div class="form-check me-3">
+                            <input class="form-check-input" type="checkbox" onchange="this.form.submit()" name="BrandFilter" value="@brand.BrandName" id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">
+                                @brand.BrandName
+                            </label>
+                        </div>
+                    }
+                </div>
+                <h5 class="mt-2">Price</h5>
+                <hr />
+                <div class="form-check p-0 d-flex justify-content-start align-items-center flex-wrap flex-sm-nowrap">
+                    <span>From:&nbsp;</span>
+                    <input class="form-control" type="text" name="LowPrice" value="0" id="flexCheckDefault">
+                    <span>&nbsp;-&nbsp;</span>
+                    <input class="form-control" type="text" name="HighPrice" value="0" id="flexCheckDefault">
+                    <button type="submit" class="btn btn-outline-success ms-0 ms-sm-1 mt-2 mt-sm-0">Search</button>
+                </div>
+            </div>
+        }
+    </div>
+    @* Sorting and filtre display on screen >= 1400px end *@
+</div>

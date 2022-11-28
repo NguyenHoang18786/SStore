@@ -1,0 +1,190 @@
+﻿@using SStore.Models;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-lg mt-2 mb-sm-5 mb-3">
+    @* Breadcrumb *@
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb ms-2">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home", new {area = ""})" class="breadcrumb-client"><i class="bi bi-house-door"></i> Home</a></li>
+            <li class="breadcrumb-item breadcrumb-client-active">Cart</li>
+        </ol>
+    </nav>
+
+    <h2 class="text-uppercase text-center page-title mb-sm-2 mb-3">Your Cart</h2>
+    @if (Session["Cart"] != null)
+    {
+        <div class="table-responsive d-none d-sm-block">
+            <table class="table table-hover my-2">
+                <thead>
+                    <tr>
+                        <th class="text-center text-nowrap">
+                            Image
+                        </th>
+                        <th class="text-center text-nowrap" style="min-width: 200px">
+                            Name
+                        </th>
+                        <th class="text-center text-nowrap" style="min-width: 130px">
+                            Price
+                        </th>
+                        <th class="text-center text-nowrap" style="min-width: 100px">
+                            Quantity
+                        </th>
+                        <th class="text-center text-nowrap" style="min-width: 140px">
+                            Sub total
+                        </th>
+                        <th class="text-center text-nowrap">
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var cart in (List<Cart>)Session["Cart"])
+                    {
+                        <tr>
+                            <td class="text-center align-middle p-0 p-lg-2" style="max-width: 38px">
+                                <div class="image-hover img-overlay">
+                                    <a href="@Url.Action("Details", "AllProduct",  new { area = "", id = cart.Product.Id })" class="text-decoration-none">
+                                        <figure>
+                                            @if (cart.Product.Image == null)
+                                            {
+                                                <img src="@Url.Content("~/Image/noimage.png")" class="card-img-top" alt="...">
+                                            }
+                                            else
+                                            {
+                                                <img src="@Url.Content("~/Image/" + cart.Product.Image)" class="card-img-top" alt="...">
+                                            }
+                                            <div class="overlay">
+                                                @if (cart.Product.Image == null)
+                                                {
+                                                    <div class="img-overlay-text text-secondary" style="font-size:13px">Details</div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="img-overlay-text" style="font-size:13px">Details</div>
+                                                }
+                                            </div>
+                                        </figure>
+                                    </a>
+                                </div>
+                            </td>
+                            <td class="text-center align-middle text-nowrap">
+                                <a href="@Url.Action("Details", "AllProduct",  new { area = "", id = cart.Product.Id })" class="text-decoration-none text-dark">
+                                    @cart.Product.ProductName
+                                </a>
+                            </td>
+                            <td class="text-center align-middle text-nowrap">
+                                @(string.Format("{0:C2}", @cart.Product.Price))
+                            </td>
+                            <td class="text-center align-middle text-nowrap">
+                                @using (Html.BeginForm("UpdateCart", "ShoppingCart", FormMethod.Post))
+                                {
+                                    <input type="hidden" value="@cart.Product.Id" name="productId" />
+                                    <input type="number" class="text-center rounded" name="Quantity" onkeyup="if(value<1) value=1;" id="Quantity" min="1" value="@cart.Quantity" style="max-width: 70px" onchange="this.form.submit()" />
+                                }
+                            </td>
+                            <td class="text-center align-middle">
+                                @(string.Format("{0:C2}", cart.Product.Price * cart.Quantity))
+                            </td>
+                            <td class="text-center align-middle">
+                                <a href="@Url.Action("Delete", "ShoppingCart", new { area = "", id = cart.Product.Id})" class="delete-button btn">Remove</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td class="text-center fw-bold text-nowrap border-bottom-0 text-uppercase">Total</td>
+                        <td class="border-bottom-0"></td>
+                        <td class="border-bottom-0"></td>
+                        <td class="border-bottom-0"></td>
+                        <td class="text-center fw-bold text-nowrap border-bottom-0">
+                            @{
+                                List<Cart> temp = (List<Cart>)Session["Cart"];
+                                var total = String.Format("{0:C2}", temp.Sum(x => x.Quantity * x.Product.Price));
+                            }
+                            @total
+                        </td>
+                        <td class="border-bottom-0"></td>
+                    </tr>
+                </tfoot>
+            </table>
+            <div class="d-flex justify-content-between my-3">
+                <div>
+                    <a href="@Url.Action("Index", "AllProduct", new {area = ""})" class="btn back-page-client"><span class="back-page-client-text"><i class="bi bi-arrow-left"></i> Continue shopping</span></a>
+                </div>
+                @if (ViewBag.infoCart != 0)
+                {
+                    <div class="d-flex flex-column">
+                        <a href="@Url.Action("CashPayment", "ShoppingCart", new {area = ""})" class="btn sub-button mb-1"><span class="sub-button-text">Pay with Cash</span> <i class="bi bi-cash text-primary"></i><span class="sub-button-text"> <i class="bi bi-arrow-right"></i></span></a>
+                        <a href="@Url.Action("PaymentWithPaypal", "ShoppingCart", new { area = ""})" class="btn sub-button"><span class="sub-button-text">Pay with Paypal</span> <i class="bi bi-paypal text-primary"></i> <span class="sub-button-text"><i class="bi bi-arrow-right"></i></span></a>
+                    </div>
+                }
+            </div>
+        </div>
+
+        @* Display on screen <= 575 px*@
+        <div class="d-block d-sm-none">
+            <ol class="list-group">
+                @foreach (var cart in (List<Cart>)Session["Cart"])
+                {
+                    <li class="list-group-item d-flex justify-content-between align-items-start p-2">
+                        <div class="ms-2 me-auto">
+                            @if (cart.Product.Image == null)
+                            {
+                                <a href="@Url.Action("Details", "AllProduct",  new { area = "", id = cart.Product.Id })" class="text-decoration-none text-dark">
+                                    <img src="~/Image/noimage.png" class="img-fluid product-image-management img-thumbnail mb-1" style="max-width:192px; min-height:100px" />
+                                </a>
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("Details", "AllProduct",  new { area = "", id = cart.Product.Id })" class="text-decoration-none text-dark">
+                                    <img src="@Url.Content("~/Image/" + cart.Product.Image)" class="img-fluid product-image-management img-thumbnail mb-1" style="max-width:192px; min-height:100px" />
+                                </a>
+                            }
+                            <p class="fw-bold my-1 product-cart-title">
+                                <a href="@Url.Action("Details", "AllProduct",  new { area = "", id = cart.Product.Id })">
+                                    @cart.Product.ProductName
+                                </a>
+                            </p>
+                            <p class="my-1"><span class="fw-bold">Price:</span> @(string.Format("{0:C2}", @cart.Product.Price)) </p>
+                            <p class="my-1">
+                                <span class="fw-bold">Sub total:</span> @(string.Format("{0:C2}", cart.Product.Price * cart.Quantity))
+                            </p>
+                        </div>
+                        <span class="badge d-flex flex-column" style="height: 200px;">
+                            @using (Html.BeginForm("UpdateCart", "ShoppingCart", FormMethod.Post))
+                            {
+                                <input type="hidden" value="@cart.Product.Id" name="productId" />
+                                <input type="number" class="text-center rounded border-info" name="Quantity" onkeyup="if(value<1) value=1;" id="Quantity" min="1" value="@cart.Quantity" style="max-width: 42px; height:38px" onchange="this.form.submit()" />
+                            }
+                            <a href="@Url.Action("Delete", "ShoppingCart", new { area = "", id = cart.Product.Id})" class="delete-button btn mt-auto border-2" style="min-width: 42px; height:38px"><i class="bi bi-trash"></i></a>
+                        </span>
+                    </li>
+                }
+            </ol>
+            <div class="d-flex justify-content-between align-items-center p-2 border border-2 border-secondary rounded mt-2">
+                <p class="fw-bold m-0 text-uppercase">Total</p>
+                <p class="m-0 fw-bold">@total</p>
+            </div>
+            <div class="d-flex justify-content-center">
+                <div class="d-flex flex-column my-4">
+                    <a href="@Url.Action("CashPayment", "ShoppingCart", new {area = ""})" class="btn sub-button mb-1"><span class="sub-button-text">Pay with Cash</span></a>
+                    <a href="@Url.Action("PaymentWithPaypal", "ShoppingCart", new { area = ""})" class="btn sub-button mb-1"><span class="sub-button-text">Pay with paypal</span></a>
+                    <a href="@Url.Action("Index", "AllProduct", new {area = ""})" class="btn back-page-client"><span class="back-page-client-text">Continue shopping</span></a>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="p-sm-5 p-3">
+            <h4 class="text-error text-center mb-4">There are no items in the cart. Return to the store to continue shopping.</h4>
+            <div class="d-flex justify-content-center">
+                <a href="@Url.Action("Index", "AllProduct", new {area = ""})" class="btn back-page-client"><span class="back-page-client-text">Back to shopping</span></a>
+            </div>
+        </div>
+    }
+</div>
+
